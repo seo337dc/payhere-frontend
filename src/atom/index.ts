@@ -7,3 +7,8 @@ export const respositoriesAtom = atom<TRepository[]>({
   key: `respositories/${v1()}`,
   default: [],
 });
+
+export const saveRepoListAtom = atom<TRepository[]>({
+  key: `saveRepoListAtom/${v1()}`,
+  default: [],
+});

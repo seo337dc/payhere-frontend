@@ -8,3 +8,10 @@ export const getRepositoryList = async (keyword: string, nextPage: number) => {
   );
   return res.data;
 };
+
+export const getRepoIssueList = async (fullName: string) => {
+  const res = await axios.get(
+    `https://api.github.com/repos/${fullName}/issues`
+  );
+  return res.data;
+};
