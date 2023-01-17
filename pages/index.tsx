@@ -1,17 +1,18 @@
 import { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRecoilState } from "recoil";
-import { Card, Input, Empty, Divider, Avatar } from "antd";
+import { Card, Input, Empty, Divider, Avatar, message } from "antd";
+import { CheckCircleFilled, PlusCircleOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { throttle } from "lodash";
 
 import { getRepositoryList } from "@Controller";
-import { respositoriesAtom } from "@Atom";
+import { saveRepoListAtom } from "@Atom";
 import { TRepository, TSearchRepoResult } from "@Type";
 
 function Home() {
-  // const [respositories, setRespositories] =
-  //   useRecoilState<TRepository[]>(respositoriesAtom);
+  const [saveRepoList, setSaveRepoList] =
+    useRecoilState<TRepository[]>(saveRepoListAtom);
 
   const [keyword, setKeyword] = useState("");
   const nextPageRef = useRef(1);
@@ -64,13 +65,39 @@ function Home() {
     }
   }, 300);
 
-  useEffect(() => {
-    if (isLoading) {
+  const handleAddSaveRepo = (repo: TRepository) => {
+    if (saveRepoList.length >= 4) {
+      message.warning(`등록할 수 있는 레포지토리 개수는 4개입니다.`);
       return;
     }
+    const result = saveRepoList.concat(repo);
+    setSaveRepoList(result);
+    window.localStorage.setItem("saveRepoList", JSON.stringify(result));
+    message.info(`[${repo.full_name}]레포지토리를 등록하였습니다.`);
+  };
+
+  const handleDelSaveRepo = (repo: TRepository) => {
+    const result = saveRepoList.filter((data) => data.id !== repo.id);
+    setSaveRepoList(result);
+    window.localStorage.setItem("saveRepoList", JSON.stringify(result));
+    message.info(`[${repo.full_name}]레포지토리를 제거하였습니다.`);
+  };
+
+  const findSaveRepo = (saveRepo: TRepository, repo: TRepository) => {
+    if (saveRepo.id === repo.id) return true;
+  };
+
+  useEffect(() => {
+    if (isLoading) return;
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isLoading]);
+
+  useEffect(() => {
+    const localSaveRepoStr = window.localStorage.getItem("saveRepoList");
+    const parseSaveRepoList = JSON.parse(localSaveRepoStr) as TRepository[];
+    setSaveRepoList(parseSaveRepoList);
+  }, []);
 
   return (
     <Container>
@@ -93,7 +120,15 @@ function Home() {
               <div>
                 <Avatar src={repo.owner.avatar_url} />
               </div>
-              <div>버튼</div>
+              <div>
+                {saveRepoList.some((saveRepo) =>
+                  findSaveRepo(saveRepo, repo)
+                ) ? (
+                  <CustomCheckIcon onClick={() => handleDelSaveRepo(repo)} />
+                ) : (
+                  <CustomPlusIcon onClick={() => handleAddSaveRepo(repo)} />
+                )}
+              </div>
             </Footer>
             {/* <p>git 주소 : {repo.url}</p>
           <p>설명 : {repo.description}</p>
@@ -151,4 +186,14 @@ const CustomEmpty = styled(Empty)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+
+const CustomPlusIcon = styled(PlusCircleOutlined)`
+  font-size: 25px;
+  cursor: pointer;
+`;
+
+const CustomCheckIcon = styled(CheckCircleFilled)`
+  font-size: 25px;
+  cursor: pointer;
 `;
