@@ -7,6 +7,8 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { AxiosError } from "axios";
 import { RecoilRoot } from "recoil";
 
+import PageLayout from "@Components/layout/PageLayout";
+
 function MyApp({ Component, pageProps }) {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -19,6 +21,7 @@ function MyApp({ Component, pageProps }) {
         onError: (err: unknown) => {
           if (err instanceof AxiosError) {
             const code = err.response?.data.code;
+            console.error(code);
           }
         },
       },
@@ -29,7 +32,9 @@ function MyApp({ Component, pageProps }) {
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
         <RecoilRoot>
-          <Component {...pageProps} />
+          <PageLayout>
+            <Component {...pageProps} />
+          </PageLayout>
         </RecoilRoot>
       </Hydrate>
       <ReactQueryDevtools />

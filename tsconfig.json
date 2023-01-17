@@ -16,8 +16,9 @@
     "jsx": "preserve",
     "baseUrl": "./",
     "paths": {
-      // "@Type/*": ["src/type.ts"],
-      // "@Components/*": ["src/components/*"],
+      "@Type": ["src/types"],
+      "@Type/*": ["src/types/*"],
+      "@Components/*": ["src/components/*"],
       "@Controller/*": ["src/controller/*"],
       "@Controller": ["src/controller"],
       "@Atom/*": ["src/atom/*"],

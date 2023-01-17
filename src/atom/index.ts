@@ -1,7 +1,9 @@
 import { atom } from "recoil";
 import { v1 } from "uuid";
 
-export const respositoryListAtom = atom<[]>({
-  key: `stepConbuildTypedition/${v1()}`,
+import { TRepository } from "@Type";
+
+export const respositoriesAtom = atom<TRepository[]>({
+  key: `respositories/${v1()}`,
   default: [],
 });
