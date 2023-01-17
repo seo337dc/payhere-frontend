@@ -99,8 +99,6 @@ function Home() {
     setSaveRepoList(parseSaveRepoList || []);
   }, []);
 
-  console.log(saveRepoList);
-
   return (
     <Container>
       <Input.Search
