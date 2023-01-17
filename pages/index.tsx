@@ -96,8 +96,10 @@ function Home() {
   useEffect(() => {
     const localSaveRepoStr = window.localStorage.getItem("saveRepoList");
     const parseSaveRepoList = JSON.parse(localSaveRepoStr) as TRepository[];
-    setSaveRepoList(parseSaveRepoList);
+    setSaveRepoList(parseSaveRepoList || []);
   }, []);
+
+  console.log(saveRepoList);
 
   return (
     <Container>
