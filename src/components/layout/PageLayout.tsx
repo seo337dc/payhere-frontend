@@ -1,40 +1,32 @@
+import { useRouter } from "next/router";
 import React from "react";
-import {
-  AppstoreOutlined,
-  BarChartOutlined,
-  CloudOutlined,
-  ShopOutlined,
-  TeamOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from "@ant-design/icons";
-import type { MenuProps } from "antd";
-import { Layout, Menu, theme } from "antd";
+import { UserOutlined, VideoCameraOutlined } from "@ant-design/icons";
+import { Layout, Menu } from "antd";
 import styled from "styled-components";
 
-const { Header, Content, Footer, Sider } = Layout;
+import type { MenuProps } from "antd";
 
-const items: MenuProps["items"] = [
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
-  BarChartOutlined,
-  CloudOutlined,
-  AppstoreOutlined,
-  TeamOutlined,
-  ShopOutlined,
-].map((icon, index) => ({
-  key: String(index + 1),
-  icon: React.createElement(icon),
-  label: `nav ${index + 1}`,
-}));
+const { Header, Content, Footer, Sider } = Layout;
 
 interface Props {
   children: React.ReactNode;
 }
 
 const PageLayout = ({ children }: Props) => {
+  const router = useRouter();
+
+  const items: MenuProps["items"] = [UserOutlined, VideoCameraOutlined].map(
+    (icon, index) => ({
+      key: String(index + 1),
+      icon: React.createElement(icon),
+      label: index === 0 ? "Repository" : "Issue",
+      onClick: (e) => {
+        if (e.key === "1") router.push("/");
+        if (e.key === "2") router.push("/mypage");
+      },
+    })
+  );
+
   return (
     <Layout hasSider>
       <Sider
@@ -50,7 +42,7 @@ const PageLayout = ({ children }: Props) => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["4"]}
+          defaultSelectedKeys={["0"]}
           items={items}
         />
       </Sider>

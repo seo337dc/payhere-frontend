@@ -11,6 +11,7 @@ export interface TRepository {
   updated_at: string; //"2023-01-16T10:50:13Z";
   url: string; //"https://api.github.com/repos/duxianwei520/react";
   open_issues_count: number;
+  html_url: string; // https://github.com/atom/atom
   owner: TOwner;
 }
 
@@ -50,5 +51,6 @@ export interface TIssue {
   url: string; // "https://api.github.com/"
   repository_url: string;
   html_url: string;
+  number: number;
   user: TUser;
 }
