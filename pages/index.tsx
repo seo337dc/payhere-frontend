@@ -121,7 +121,9 @@ function Home() {
                 <Avatar src={repo.owner.avatar_url} />
               </div>
               <div>
-                {saveRepoList.some((saveRepo) =>
+                {saveRepoList &&
+                saveRepoList.length > 0 &&
+                saveRepoList.some((saveRepo) =>
                   findSaveRepo(saveRepo, repo)
                 ) ? (
                   <CustomCheckIcon onClick={() => handleDelSaveRepo(repo)} />
