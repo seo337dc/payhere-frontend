@@ -3,7 +3,7 @@ import { useRecoilState } from "recoil";
 import { useQueries } from "@tanstack/react-query";
 import styled from "styled-components";
 import parser from "react-html-parser";
-import { Card, Empty, Pagination } from "antd";
+import { Card, Empty, Divider, Pagination } from "antd";
 
 import { saveRepoListAtom } from "@Atom";
 import { getRepoIssueList } from "@Controller";
@@ -32,6 +32,20 @@ function MyPage() {
     window.open(issue.html_url, "");
   };
 
+  const repoName = (issue: TIssue) => {
+    const findRepoInfo = saveRepoList.find(
+      (repo) => repo.url === issue.repository_url
+    );
+    if (findRepoInfo) return findRepoInfo.full_name;
+    return "-";
+  };
+
+  useEffect(() => {
+    const localSaveRepoStr = window.localStorage.getItem("saveRepoList");
+    const parseSaveRepoList = JSON.parse(localSaveRepoStr) as TRepository[];
+    setSaveRepoList(parseSaveRepoList || []);
+  }, []);
+
   const isLoading = results.some((result) => result.isLoading);
 
   const issueList = useMemo(() => {
@@ -51,12 +65,6 @@ function MyPage() {
     return [] as TIssue[];
   }, [results]);
 
-  useEffect(() => {
-    const localSaveRepoStr = window.localStorage.getItem("saveRepoList");
-    const parseSaveRepoList = JSON.parse(localSaveRepoStr) as TRepository[];
-    setSaveRepoList(parseSaveRepoList);
-  }, []);
-
   return (
     <Container>
       {issueList.length === 0 && <CustomEmpty />}
@@ -68,6 +76,11 @@ function MyPage() {
             size="small"
             onClick={() => handleClickIssue(issue)}
           >
+            <RepositoryName>
+              <strong>repo:</strong>
+              <span className="name">{repoName(issue)}</span>
+            </RepositoryName>
+            <CustomDivider style={{ margin: "10px 0" }} />
             <Text>{parser(issue.body)}</Text>
           </CustomCard>
         ))}
@@ -125,6 +138,13 @@ const Text = styled.div`
   color: rgb(140, 140, 140);
 `;
 
+const RepositoryName = styled.div`
+  .name {
+    margin-left: 5px;
+    color: rgb(140, 140, 140);
+  }
+`;
+
 const CustomEmpty = styled(Empty)`
   width: 100%;
   height: 90vh;
@@ -138,4 +158,8 @@ const PagenationWrap = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
+`;
+
+const CustomDivider = styled(Divider)`
+  margin: 10px 0 important;
 `;
