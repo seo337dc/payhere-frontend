@@ -6,6 +6,7 @@ import parser from "react-html-parser";
 import type { TRepository, TIssue } from "@Type";
 
 import { saveRepoListAtom } from "@Atom";
+
 interface TProps {
   issue: TIssue;
 }
@@ -73,15 +74,6 @@ const RepositoryName = styled.div`
     margin-left: 5px;
     color: rgb(140, 140, 140);
   }
-`;
-
-const CustomEmpty = styled(Empty)`
-  width: 100%;
-  height: 90vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 `;
 
 const CustomDivider = styled(Divider)`

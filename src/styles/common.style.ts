@@ -3,10 +3,10 @@ import { Empty } from "antd";
 
 export const Container = styled.div`
   width: 800px;
-  padding: 10px 40px;
+  padding: 10px 0px;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 20px;
 `;
 
 export const CustomEmpty = styled(Empty)`

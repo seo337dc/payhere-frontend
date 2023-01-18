@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRecoilState } from "recoil";
-import { Input, message, Spin } from "antd";
+import { Input, message, Spin, Modal } from "antd";
 import { throttle } from "lodash";
+import styled from "styled-components";
 
 import RepositoryCard from "@Components/app/RepositoryCard";
+import MoveToTopBtn from "@Components/basic/MoveToTopBtn";
+import DetailSaveListBtn from "@Components/basic/DetailSaveListBtn";
 
 import { getRepositoryList } from "@Controller";
 import { saveRepoListAtom } from "@Atom";
@@ -13,6 +16,8 @@ import * as CS from "@Style/common.style";
 
 import type { TRepository, TSearchRepoResult } from "@Type";
 
+const btnProps = { style: { display: "none" } };
+
 function Home() {
   const [saveRepoList, setSaveRepoList] =
     useRecoilState<TRepository[]>(saveRepoListAtom);
@@ -20,12 +25,13 @@ function Home() {
   const [keyword, setKeyword] = useState("");
   const nextPageRef = useRef(1);
   const [repositories, setRespositories] = useState<TSearchRepoResult>(null);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const { refetch, isInitialLoading: isLoading } = useQuery<TSearchRepoResult>(
+  const { refetch, isLoading, isFetching } = useQuery<TSearchRepoResult>(
     ["repositories"],
     () => getRepositoryList(keyword, nextPageRef.current),
     {
-      enabled: true,
+      // enabled: true,
       onSuccess: (result) => {
         if (repositories) {
           setRespositories({
@@ -103,20 +109,21 @@ function Home() {
   }, []);
 
   return (
-    <Spin spinning={isLoading} tip="데이터를 검색 중입니다.">
+    <Spin spinning={isFetching} tip="데이터를 검색 중입니다.">
+      <Input.Search
+        style={{ width: 750 }}
+        placeholder="레포지토리를 검색하세요."
+        value={keyword}
+        enterButton
+        onSearch={onSearch}
+        onChange={(e) => setKeyword(e.target.value)}
+      />
       <CS.Container>
-        <Input.Search
-          placeholder="레포지토리를 검색하세요."
-          value={keyword}
-          enterButton
-          onSearch={onSearch}
-          onChange={(e) => setKeyword(e.target.value)}
-        />
         {!repositories && <CS.CustomEmpty />}
         {repositories &&
-          repositories.items.map((repo) => (
+          repositories.items.map((repo, index) => (
             <RepositoryCard
-              key={repo.id}
+              key={`${repo.id}_${index}`}
               repo={repo}
               isAdd={findSaveRepo(repo)}
               addRepo={handleAddSaveRepo}
@@ -124,8 +131,39 @@ function Home() {
             />
           ))}
       </CS.Container>
+      <MoveToTopBtn />
+
+      {saveRepoList.length > 0 && <DetailSaveListBtn setOpen={setIsOpen} />}
+
+      <Modal
+        width="770px"
+        visible={isOpen}
+        cancelButtonProps={btnProps}
+        okButtonProps={btnProps}
+        onCancel={() => setIsOpen(false)}
+      >
+        <ModalInfo>
+          {saveRepoList.map((repo, idx) => (
+            <RepositoryCard
+              key={`${repo.id}_${idx}`}
+              repo={repo}
+              isAdd={findSaveRepo(repo)}
+              addRepo={handleAddSaveRepo}
+              delRepo={handleDelSaveRepo}
+            />
+          ))}
+        </ModalInfo>
+      </Modal>
     </Spin>
   );
 }
 
 export default Home;
+
+const ModalInfo = styled.div`
+  width: 100%;
+  height: 500px;
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+`;
