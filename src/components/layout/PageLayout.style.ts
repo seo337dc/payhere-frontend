@@ -10,11 +10,11 @@ export const ContentWrap = styled(Content)`
 `;
 
 export const CustomSider = styled(Sider)`
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  overflow: auto;
+  overflow: auto !important;
+  position: fixed !important;
+  left: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
 `;
 
 export const InnerLayout = styled(Layout)`
