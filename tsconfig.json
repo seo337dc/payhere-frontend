@@ -22,7 +22,8 @@
       "@Controller/*": ["src/controller/*"],
       "@Controller": ["src/controller"],
       "@Atom/*": ["src/atom/*"],
-      "@Atom": ["src/atom"]
+      "@Atom": ["src/atom"],
+      "@Style/*": ["src/styles/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
