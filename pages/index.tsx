@@ -57,6 +57,7 @@ function Home() {
   const handleAddSaveRepo = (repo: TRepository) => {
     if (saveRepoList.length >= 4) {
       message.warning(`등록할 수 있는 레포지토리 개수는 4개입니다.`);
+      setIsOpen(true);
       return;
     }
     const result = saveRepoList.concat(repo);
