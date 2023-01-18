@@ -1,5 +1,5 @@
 import { useRecoilValue } from "recoil";
-import { Card, Empty, Divider } from "antd";
+import { Card, Divider } from "antd";
 import styled from "styled-components";
 import parser from "react-html-parser";
 

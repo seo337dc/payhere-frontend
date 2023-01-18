@@ -23,3 +23,11 @@ export const PagenationWrap = styled.div`
   display: flex;
   justify-content: center;
 `;
+
+export const ModalWrap = styled.div`
+  width: 100%;
+  height: 500px;
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+`;

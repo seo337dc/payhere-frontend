@@ -37,13 +37,9 @@ const PageLayout = ({ children }: Props) => {
         />
       </S.CustomSider>
       <S.InnerLayout className="site-layout">
-        {/* <Header style={{ padding: 0, background: colorBgContainer }} /> */}
         <S.ContentWrap>
           <main>{children}</main>
         </S.ContentWrap>
-        {/* <Footer style={{ textAlign: "center" }}>
-          Ant Design ©2023 Created by Ant UED
-        </Footer> */}
       </S.InnerLayout>
     </Layout>
   );

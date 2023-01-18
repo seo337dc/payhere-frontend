@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
-
 import { CaretUpOutlined } from "@ant-design/icons";
+
 import { center } from "@Style";
 
 export default function MoveToTopBtn() {
@@ -24,13 +24,13 @@ export default function MoveToTopBtn() {
   };
 
   return (
-    <MoveToTopBtnContainer onClick={moveToTop} scrollPosition={scrollPosition}>
+    <Wrapper onClick={moveToTop} scrollPosition={scrollPosition}>
       <CaretUpOutlined />
-    </MoveToTopBtnContainer>
+    </Wrapper>
   );
 }
 
-const MoveToTopBtnContainer = styled.button<{ scrollPosition: number }>`
+const Wrapper = styled.button<{ scrollPosition: number }>`
   ${center};
   position: fixed;
   right: 50px;

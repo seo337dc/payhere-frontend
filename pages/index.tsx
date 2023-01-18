@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useRecoilState } from "recoil";
 import { Input, message, Spin, Modal } from "antd";
 import { throttle } from "lodash";
-import styled from "styled-components";
 
 import RepositoryCard from "@Components/app/RepositoryCard";
 import MoveToTopBtn from "@Components/basic/MoveToTopBtn";
@@ -31,7 +30,6 @@ function Home() {
     ["repositories"],
     () => getRepositoryList(keyword, nextPageRef.current),
     {
-      // enabled: true,
       onSuccess: (result) => {
         if (repositories) {
           setRespositories({
@@ -142,7 +140,7 @@ function Home() {
         okButtonProps={btnProps}
         onCancel={() => setIsOpen(false)}
       >
-        <ModalInfo>
+        <CS.ModalWrap>
           {saveRepoList.map((repo, idx) => (
             <RepositoryCard
               key={`${repo.id}_${idx}`}
@@ -152,18 +150,10 @@ function Home() {
               delRepo={handleDelSaveRepo}
             />
           ))}
-        </ModalInfo>
+        </CS.ModalWrap>
       </Modal>
     </Spin>
   );
 }
 
 export default Home;
-
-const ModalInfo = styled.div`
-  width: 100%;
-  height: 500px;
-  display: flex;
-  gap: 5px;
-  flex-wrap: wrap;
-`;
